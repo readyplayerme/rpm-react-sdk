@@ -50,5 +50,30 @@
       "path": "dist/rpm-web-sdk.esm.js",
       "limit": "10 KB"
     }
-  ]
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.21.4",
+    "@size-limit/preset-small-lib": "^8.2.4",
+    "@storybook/addon-essentials": "^7.0.7",
+    "@storybook/addon-info": "^6.0.0-alpha.2",
+    "@storybook/addon-links": "^7.0.7",
+    "@storybook/addons": "^7.0.7",
+    "@storybook/react": "^7.0.7",
+    "@storybook/react-vite": "^7.0.7",
+    "@tsconfig/recommended": "^1.0.2",
+    "@tsconfig/vite-react": "^1.0.1",
+    "@types/react": "^18.0.38",
+    "@types/react-dom": "^18.0.11",
+    "babel-loader": "^9.1.2",
+    "dts-cli": "^2.0.2",
+    "husky": "^8.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-is": "^18.2.0",
+    "size-limit": "^8.2.4",
+    "storybook": "^7.0.7",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.1"
+  }
 }
