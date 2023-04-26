@@ -11,3 +11,32 @@ export enum EventName {
     UserUpdated = 'v1.user.updated',
     UserLogout = 'v1.user.logout'
 }
+
+export type CreatorConfig = {
+    clearCache?: boolean;
+    bodyType?: BodyType;
+    quickStart?: boolean;
+    language?: Language;
+}
+
+export type AvatarConfig = {
+    quality?: 'low' | 'medium' | 'high';
+    meshLod?: 0 | 1 | 2;
+    textureSizeLimit?: number;
+    textureAtlas?: 'none' | 256 | 512 | 1024;
+    textureChannels?: TextureChannel[];
+    morphTargets?: string[];
+    useDracoCompression?: boolean;
+    useMeshOptCompression?: boolean;
+    pose?: 'A' | 'T';
+    useHands?: boolean;
+}
+
+export enum TextureChannel {
+    None = 'none',
+    BaseColor = 'baseColor',
+    Normal = 'normal',
+    MetallicRoughness = 'metallicRoughness',
+    Emissive = 'emissive',
+    Occlusion = 'occlusion'
+}
