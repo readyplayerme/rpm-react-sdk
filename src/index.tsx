@@ -1,5 +1,6 @@
-import { FC, useEffect, useRef } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { EventName, CreatorConfig, AvatarConfig, Language } from "./types";
+import { Avatar } from "@readyplayerme/visage";
 
 export interface Props {
   subdomain: string;
@@ -15,15 +16,28 @@ export interface Props {
 const defaultStyle: React.CSSProperties = {
   width: '100%',
   height: '800px',
-  border: 'none',
   display: 'block',
   overflow: 'hidden',
   borderRadius: '8px',
 };
 
+const iframeStyle: React.CSSProperties = {
+  width: '100%',
+  height: '100%',
+  border: 'none',
+};
+
+const containerStyle: React.CSSProperties = {
+  width: '100%',
+  height: '100%',
+  position: 'relative',
+}
+
 export const ReadyPlayerMe: FC<Props> = ({subdomain, creatorConfig, avatarConfig, style, className, onUserSet, onAvatarExported}) => 
 { 
   const frameRef = useRef<HTMLIFrameElement>(null);
+  const [url, setUrl] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     window.addEventListener('message', subscribe);
@@ -31,7 +45,7 @@ export const ReadyPlayerMe: FC<Props> = ({subdomain, creatorConfig, avatarConfig
     return () => {
       window.removeEventListener('message', subscribe);
     }
-  }, []);
+  }, [url]);
 
   const buildAvatarUrl = (base: string) => {
     const queryParams: string[] = [];
@@ -85,6 +99,8 @@ export const ReadyPlayerMe: FC<Props> = ({subdomain, creatorConfig, avatarConfig
         break;
       case EventName.AvatarExported:
         const avatarUrl = buildAvatarUrl(json.data.url);
+        setUrl(avatarUrl + `?${Date.now()}`);
+        setLoading(true);
         onAvatarExported?.(avatarUrl);
         break;
     }
@@ -98,5 +114,13 @@ export const ReadyPlayerMe: FC<Props> = ({subdomain, creatorConfig, avatarConfig
     }
   }
 
-  return  <iframe ref={frameRef} src={buildSrc()} className={className} style={style || defaultStyle} allow="camera *; clipboard-write" />
+  return <div className={className} style={style || defaultStyle} >
+    {url == "" ? 
+      <iframe ref={frameRef} src={buildSrc()} style={iframeStyle} allow="camera *; clipboard-write" /> :
+      <div style={containerStyle}>
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%', fontSize: 18, fontWeight: 'bold', fontFamily: 'sans-serif', position: 'absolute'}}>Loading...</div>
+        <Avatar modelSrc={url} onLoaded={() => setLoading(false)} style={{position: 'absolute'}}/>
+      </div>
+    }
+  </div>
 };
