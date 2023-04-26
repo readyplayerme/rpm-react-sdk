@@ -1,12 +1,11 @@
 import { FC, useEffect, useRef } from "react";
-import { BodyType, EventName, Language } from "./types";
+import { EventName, CreatorConfig, AvatarConfig, Language } from "./types";
 
 export interface Props {
   subdomain: string;
-  clearCache?: boolean;
-  bodyType?: BodyType;
-  quickStart?: boolean;
   language?: Language;
+  creatorConfig?: CreatorConfig;
+  avatarConfig?: AvatarConfig;
   style?: React.CSSProperties;
   className?: string;
   onUserSet?: (id: string) => void;
@@ -22,7 +21,7 @@ const defaultStyle: React.CSSProperties = {
   borderRadius: '8px',
 };
 
-export const ReadyPlayerMe: FC<Props> = ({subdomain, clearCache, bodyType, quickStart, language, style, className, onUserSet, onAvatarExported}) => 
+export const ReadyPlayerMe: FC<Props> = ({subdomain, creatorConfig, avatarConfig, style, className, onUserSet, onAvatarExported}) => 
 { 
   const frameRef = useRef<HTMLIFrameElement>(null);
 
@@ -34,14 +33,38 @@ export const ReadyPlayerMe: FC<Props> = ({subdomain, clearCache, bodyType, quick
     }
   }, []);
 
+  const buildAvatarUrl = (base: string) => {
+    const queryParams: string[] = [];
+
+    if (avatarConfig?.quality) {
+      queryParams.push(`quality=${avatarConfig.quality}`);
+    }
+    else {
+      if (avatarConfig?.meshLod) queryParams.push(`meshLod=${avatarConfig.meshLod}`);
+      if (avatarConfig?.textureSizeLimit) queryParams.push(`textureSizeLimit=${avatarConfig.textureSizeLimit}`);
+      if (avatarConfig?.textureAtlas) queryParams.push(`textureAtlas=${avatarConfig.textureAtlas}`);
+      if (avatarConfig?.morphTargets) queryParams.push(`morphTargets=${avatarConfig.morphTargets.join(',')}`);
+    }
+
+    if (avatarConfig?.pose) queryParams.push(`pose=${avatarConfig.pose}`);
+    if (avatarConfig?.useHands) queryParams.push(`useHands=${avatarConfig.useHands}`);
+    if (avatarConfig?.textureChannels) queryParams.push(`textureChannels=${avatarConfig.textureChannels.join(',')}`);
+
+    if (avatarConfig?.useDracoCompression) queryParams.push(`useDracoCompression=${avatarConfig.useDracoCompression}`);
+    if (avatarConfig?.useMeshOptCompression) queryParams.push(`useMeshOptCompression=${avatarConfig.useMeshOptCompression}`);
+
+    const query = queryParams.join("&");
+    return `${base}${query ? `?${query}` : ""}`;
+  }
+
   const buildSrc = () => {
     let src = `https://${subdomain || `demo`}.readyplayer.me`;
 
-    if (language) src += `/${language}`;
+    if (creatorConfig?.language) src += `/${creatorConfig.language}`;
     src += `/avatar?frameApi`;
-    if (clearCache) src += '&clearCache';
-    if (quickStart) src += '&quickStart';
-    if (bodyType) src += `&bodyType=${bodyType}`;
+    if (creatorConfig?.clearCache) src += '&clearCache';
+    if (creatorConfig?.quickStart) src += '&quickStart';
+    if (creatorConfig?.bodyType) src += `&bodyType=${creatorConfig?.bodyType}`;
 
     return src;
   }
@@ -59,11 +82,10 @@ export const ReadyPlayerMe: FC<Props> = ({subdomain, clearCache, bodyType, quick
         break;
       case EventName.UserSet:
         onUserSet?.(json.data.id);
-        console.log(`User ID: ${json.data.id}`);
         break;
       case EventName.AvatarExported:
-        onAvatarExported?.(json.data.url);
-        console.log(`Avatar URL: ${json.data.url}`);
+        const avatarUrl = buildAvatarUrl(json.data.url);
+        onAvatarExported?.(avatarUrl);
         break;
     }
   }
