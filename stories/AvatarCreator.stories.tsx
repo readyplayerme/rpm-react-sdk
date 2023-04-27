@@ -1,26 +1,70 @@
 import React from 'react';
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { AvatarCreator, AvatarCreatorProps } from '../src/components/avatar-creator';
+import { Container } from './container';
 
-const meta: Meta = {
+const meta: Meta<AvatarCreatorProps> = {
   title: 'Avatar Creator',
   component: AvatarCreator,
-  argTypes: {
-    
-  },
-  parameters: {
-    controls: { expanded: true },
-  },
 };
 
 export default meta;
+type Story = StoryObj<AvatarCreatorProps>;
 
-const Template = (args: AvatarCreatorProps) => <div style={{height: 800, borderRadius: 8, overflow: 'hidden'}}>
-  <AvatarCreator {...args} />;
-</div>
+export const Default: Story = {
+    render : (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
+    args: {
+      subdomain: 'demo',
+    }
+};
 
-// By passing using the Args format for exported stories, you can control the props for a component for reuse in a test
-// https://storybook.js.org/docs/react/workflows/unit-testing
-export const Default = Template.bind({});
+export const HalfBody: Story = {
+  render : (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
+  args: {
+    subdomain: 'demo',
+    editorConfig: {
+      bodyType: 'halfbody',
+      clearCache: true,
+    }
+  }
+};
 
-Default.args = {};
+export const LowQuality: Story = {
+  render : (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
+  args: {
+    subdomain: 'demo',
+    editorConfig: {
+      bodyType: 'fullbody',
+      clearCache: true,
+    },
+    avatarConfig: {
+      quality: 'low',
+    },
+    viewerConfig: {
+      loadingNode: 'Loading...',
+      style: {
+        backgroundColor: '#ddd',
+      }
+    }
+  }
+};
+
+export const TPose: Story = {
+  render : (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
+  args: {
+    subdomain: 'demo',
+    editorConfig: {
+      bodyType: 'fullbody',
+      clearCache: true,
+    },
+    avatarConfig: {
+      pose: 'T',
+    },
+    viewerConfig: {
+      loadingNode: 'Loading...',
+      style: {
+        backgroundColor: '#ddd',
+      }
+    }
+  }
+};
