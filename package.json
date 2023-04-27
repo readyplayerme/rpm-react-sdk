@@ -1,14 +1,21 @@
 {
-  "name": "rpm-web-sdk",
+  "name": "@readyplayerme/rpm-web-sdk",
   "version": "0.1.0",
+  "description": "Ready Player Me Web SDK",
+  "keywords": [
+    "readyplayerme",
+    "avatar",
+    "react",
+    "typescript",
+    "glb"
+  ],
   "license": "MIT",
-  "author": "Sercan Altundas",
+  "author": "Ready Player Me",
   "main": "dist/index.js",
   "module": "dist/rpm-web-sdk.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "scripts": {
     "analyze": "size-limit --why",
