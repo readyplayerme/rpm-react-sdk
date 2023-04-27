@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useRef } from "react";
-import { EventName, EditorConfig, AvatarConfig } from "../types";
+import React, { FC, useEffect, useRef } from 'react';
+import { EventName, EditorConfig } from '../types';
 
 export interface AvatarEditorProps {
   subdomain: string;
@@ -14,18 +14,8 @@ const style: React.CSSProperties = {
   border: 'none',
 };
 
-export const AvatarEditor: FC<AvatarEditorProps> = ({subdomain, editorConfig, onUserSet, onAvatarExported}) => 
-{ 
+export const AvatarEditor: FC<AvatarEditorProps> = ({ subdomain, editorConfig, onUserSet, onAvatarExported }) => {
   const frameRef = useRef<HTMLIFrameElement>(null);
-
-  useEffect(() => {
-    window.addEventListener('message', subscribe);
-
-    return () => {
-      window.removeEventListener('message', subscribe);
-    }
-  }, []);
-
 
   const buildSrc = () => {
     let src = `https://${subdomain || `demo`}.readyplayer.me`;
@@ -37,7 +27,7 @@ export const AvatarEditor: FC<AvatarEditorProps> = ({subdomain, editorConfig, on
     if (editorConfig?.bodyType) src += `&bodyType=${editorConfig?.bodyType}`;
 
     return src;
-  }
+  };
 
   const subscribe = (event: MessageEvent) => {
     const json = safeParse(event);
@@ -46,9 +36,9 @@ export const AvatarEditor: FC<AvatarEditorProps> = ({subdomain, editorConfig, on
       return;
     }
 
-    switch (json.eventName)  {
+    switch (json.eventName) {
       case EventName.FrameReady:
-        frameRef.current?.contentWindow?.postMessage(JSON.stringify({ target: 'readyplayerme', type: 'subscribe', eventName: 'v1.**'}), '*');
+        frameRef.current?.contentWindow?.postMessage(JSON.stringify({ target: 'readyplayerme', type: 'subscribe', eventName: 'v1.**' }), '*');
         break;
       case EventName.UserSet:
         onUserSet?.(json.data.id);
@@ -57,7 +47,15 @@ export const AvatarEditor: FC<AvatarEditorProps> = ({subdomain, editorConfig, on
         onAvatarExported?.(json.data.url);
         break;
     }
-  }
+  };
+
+  useEffect(() => {
+    window.addEventListener('message', subscribe);
+
+    return () => {
+      window.removeEventListener('message', subscribe);
+    };
+  });
 
   function safeParse(event: MessageEvent) {
     try {
@@ -67,5 +65,5 @@ export const AvatarEditor: FC<AvatarEditorProps> = ({subdomain, editorConfig, on
     }
   }
 
-  return <iframe ref={frameRef} src={buildSrc()} style={style} allow="camera *; clipboard-write" />
+  return <iframe title="Ready Player Me" ref={frameRef} src={buildSrc()} style={style} allow="camera *; clipboard-write" />;
 };

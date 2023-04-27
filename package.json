@@ -27,10 +27,11 @@
     }
   },
   "prettier": {
-    "printWidth": 80,
+    "printWidth": 400,
     "semi": true,
     "singleQuote": true,
-    "trailingComma": "es5"
+    "trailingComma": "es5",
+    "endOfLine": "auto"
   },
   "jest": {
     "testEnvironment": "jsdom"

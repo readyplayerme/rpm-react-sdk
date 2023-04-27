@@ -1,26 +1,26 @@
-import { FC, useState } from "react"
-import { AvatarViewer } from "./avatar-viewer"
-import { AvatarEditor } from "./avatar-editor"
-import { AvatarConfig, EditorConfig, ViewerConfig } from "../types";
+import { FC, useState } from 'react';
+import { AvatarViewer } from './avatar-viewer';
+import { AvatarEditor } from './avatar-editor';
+import { AvatarConfig, EditorConfig, ViewerConfig } from '../types';
 
 export interface AvatarCreatorProps {
   subdomain: string;
   editorConfig?: EditorConfig;
   avatarConfig?: AvatarConfig;
-  viewerConfig?: ViewerConfig;  
+  viewerConfig?: ViewerConfig;
   onUserSet?: (id: string) => void;
   onAvatarExported?: (url: string) => void;
   onAvatarLoaded?: () => void;
 }
 
-export const AvatarCreator : FC<AvatarCreatorProps> = ({subdomain, editorConfig, viewerConfig, avatarConfig, onUserSet, onAvatarExported, onAvatarLoaded}) => {
-  const [url, setUrl] = useState("")
+export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig, viewerConfig, avatarConfig, onUserSet, onAvatarExported, onAvatarLoaded }) => {
+  const [url, setUrl] = useState('');
 
   const handleOnAvatarExported = (url: string) => {
     const avatarUrl = buildAvatarUrl(url);
     setUrl(avatarUrl);
     onAvatarExported && onAvatarExported(avatarUrl);
-  }
+  };
 
   const buildAvatarUrl = (base: string) => {
     const queryParams: string[] = [];
@@ -38,11 +38,12 @@ export const AvatarCreator : FC<AvatarCreatorProps> = ({subdomain, editorConfig,
     if (avatarConfig?.useDracoCompression) queryParams.push(`useDracoCompression=${avatarConfig.useDracoCompression}`);
     if (avatarConfig?.useMeshOptCompression) queryParams.push(`useMeshOptCompression=${avatarConfig.useMeshOptCompression}`);
 
-    const query = queryParams.join("&");
-    return `${base}${query ? `?${query}` : ""}`;
-  }
+    const query = queryParams.join('&');
+    return `${base}${query ? `?${query}` : ''}`;
+  };
 
-  return  url == "" ? 
-    <AvatarEditor subdomain={subdomain} editorConfig={editorConfig} onUserSet={onUserSet} onAvatarExported={handleOnAvatarExported}/> :
-    <AvatarViewer url={url} bodyType={editorConfig?.bodyType} animationUrl={viewerConfig?.animationUrl} onLoaded={onAvatarLoaded} style={viewerConfig?.style} className={viewerConfig?.className}/>
-}
+  // prettier-ignore
+  return url === '' ?
+    <AvatarEditor subdomain={subdomain} editorConfig={editorConfig} onUserSet={onUserSet} onAvatarExported={handleOnAvatarExported} /> :
+    <AvatarViewer url={url} bodyType={editorConfig?.bodyType} animationUrl={viewerConfig?.animationUrl} onLoaded={onAvatarLoaded} style={viewerConfig?.style} className={viewerConfig?.className} />
+};
