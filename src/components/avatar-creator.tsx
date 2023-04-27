@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { AvatarViewer } from './avatar-viewer';
 import { AvatarEditor } from './avatar-editor';
 import { AvatarConfig, EditorConfig, ViewerConfig } from '../types';
@@ -14,7 +14,7 @@ export interface AvatarCreatorProps {
 }
 
 export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig, viewerConfig, avatarConfig, onUserSet, onAvatarExported, onAvatarLoaded }) => {
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = React.useState('');
 
   const handleOnAvatarExported = (url: string) => {
     const avatarUrl = buildAvatarUrl(url);

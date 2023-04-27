@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { Avatar } from '@readyplayerme/visage';
 import { BodyType } from '../types';
 
@@ -20,7 +20,7 @@ const containerStyle: React.CSSProperties = {
 };
 
 export const AvatarViewer: FC<AvatarViewerProps> = ({ url, animationUrl, style, className, bodyType, loadingNode, onLoaded }) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = React.useState(true);
 
   const handleOnLoaded = () => {
     if (onLoaded) onLoaded();
