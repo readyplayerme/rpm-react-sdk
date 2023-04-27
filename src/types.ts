@@ -12,11 +12,18 @@ export enum EventName {
     UserLogout = 'v1.user.logout'
 }
 
-export type CreatorConfig = {
+export type EditorConfig = {
     clearCache?: boolean;
     bodyType?: BodyType;
     quickStart?: boolean;
     language?: Language;
+}
+
+export type ViewerConfig = {
+    animationUrl?: string;
+    loadingNode?: React.ReactNode;
+    style?: React.CSSProperties;
+    className?: string;
 }
 
 export type AvatarConfig = {

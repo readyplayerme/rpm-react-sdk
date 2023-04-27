@@ -1,44 +1,38 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import { FC, useState } from "react";
 import { Avatar } from "@readyplayerme/visage";
-import { AvatarCreator, AvatarCreatorProps } from "./avatar-creator";
+import { BodyType } from "../types";
 
-export interface Props {
-    subdomain: string;
-    creatorConfig?: AvatarCreatorProps;
+export interface AvatarViewerProps {
+    url: string;
+    animationUrl?: string;
+    bodyType?: BodyType;
+    style?: React.CSSProperties;
+    className?: string;
+    loadingNode?: React.ReactNode;
+    onLoaded?: () => void;
 }
 
 const containerStyle: React.CSSProperties = {
     width: '100%',
     height: '100%',
-    position: 'relative',
-  }
+    border: 'none',
+    position: 'relative'
+};
 
-  
-const defaultStyle: React.CSSProperties = {
-    width: '100%',
-    height: '800px',
-    display: 'block',
-    overflow: 'hidden',
-    borderRadius: '8px',
-  };
-  
-export const AvatarViewer: FC<Props> = ({subdomain, creatorConfig}) => 
-{ 
-    const [url, setUrl] = useState<string>("");
-    const [loading, setLoading] = useState<boolean>(true);
+export const AvatarViewer: FC<AvatarViewerProps> = ({url, animationUrl, style, className, bodyType, loadingNode, onLoaded}) => 
+{
+    const [loading, setLoading] = useState(true);
 
-    return <div>
-        { url == "" ? 
-            <AvatarCreator subdomain={subdomain} { ...creatorConfig } /> :
-            <div style={containerStyle}>
-                { loading && <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%', fontSize: 18, fontWeight: 'bold', fontFamily: 'sans-serif', position: 'absolute'}}>Loading...</div>}
-                <Avatar modelSrc={url} onLoaded={() => setLoading(false)} style={{position: 'absolute'}}/>
-            </div>
-        }
+    const handleOnLoaded = () => {
+        if(onLoaded) onLoaded();
+        setLoading(false);
+    }
+
+    return <div style={containerStyle}>
+        <Avatar modelSrc={url} animationSrc={animationUrl} halfBody={bodyType == 'halfbody'}
+            shadows headMovement idleRotation onLoaded={handleOnLoaded} 
+            cameraTarget={bodyType == 'halfbody' ? 0.6 : 0 } cameraInitialDistance={bodyType == 'halfbody' ? 0.5 : 2.5}
+            style={{position: 'absolute', ...style}} className={className} />
+        { loading && <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%', position: 'absolute'}}>{loadingNode || "Loading..."}</div>}
     </div>
 }
-
-/**
-            <div style={containerStyle}>
-            { loading && <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%', fontSize: 18, fontWeight: 'bold', fontFamily: 'sans-serif', position: 'absolute'}}>Loading...</div>}
-            <Avatar modelSrc={url} onLoaded={() => setLoading(false)} style={{position: 'absolute'}}/> */

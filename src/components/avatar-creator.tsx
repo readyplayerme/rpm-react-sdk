@@ -1,44 +1,35 @@
-import React, { FC, useEffect, useRef } from "react";
-import { EventName, CreatorConfig, AvatarConfig } from "../types";
+import { FC, useState } from "react"
+import { AvatarViewer } from "./avatar-viewer"
+import { AvatarEditor } from "./avatar-editor"
+import { AvatarConfig, EditorConfig, ViewerConfig } from "../types";
 
 export interface AvatarCreatorProps {
   subdomain: string;
-  creatorConfig?: CreatorConfig;
+  editorConfig?: EditorConfig;
   avatarConfig?: AvatarConfig;
+  viewerConfig?: ViewerConfig;  
   onUserSet?: (id: string) => void;
   onAvatarExported?: (url: string) => void;
+  onAvatarLoaded?: () => void;
 }
 
-const style: React.CSSProperties = {
-  width: '100%',
-  height: '100%',
-  border: 'none',
-};
+export const AvatarCreator : FC<AvatarCreatorProps> = ({subdomain, editorConfig, viewerConfig, avatarConfig, onUserSet, onAvatarExported, onAvatarLoaded}) => {
+  const [url, setUrl] = useState("")
 
-export const AvatarCreator: FC<AvatarCreatorProps> = ({subdomain, creatorConfig, avatarConfig, onUserSet, onAvatarExported}) => 
-{ 
-  const frameRef = useRef<HTMLIFrameElement>(null);
-
-  useEffect(() => {
-    window.addEventListener('message', subscribe);
-
-    return () => {
-      window.removeEventListener('message', subscribe);
-    }
-  }, []);
+  const handleOnAvatarExported = (url: string) => {
+    const avatarUrl = buildAvatarUrl(url);
+    setUrl(avatarUrl);
+    onAvatarExported && onAvatarExported(avatarUrl);
+  }
 
   const buildAvatarUrl = (base: string) => {
     const queryParams: string[] = [];
 
-    if (avatarConfig?.quality) {
-      queryParams.push(`quality=${avatarConfig.quality}`);
-    }
-    else {
-      if (avatarConfig?.meshLod) queryParams.push(`meshLod=${avatarConfig.meshLod}`);
-      if (avatarConfig?.textureSizeLimit) queryParams.push(`textureSizeLimit=${avatarConfig.textureSizeLimit}`);
-      if (avatarConfig?.textureAtlas) queryParams.push(`textureAtlas=${avatarConfig.textureAtlas}`);
-      if (avatarConfig?.morphTargets) queryParams.push(`morphTargets=${avatarConfig.morphTargets.join(',')}`);
-    }
+    if (avatarConfig?.quality) queryParams.push(`quality=${avatarConfig.quality}`);
+    if (avatarConfig?.meshLod) queryParams.push(`meshLod=${avatarConfig.meshLod}`);
+    if (avatarConfig?.textureSizeLimit) queryParams.push(`textureSizeLimit=${avatarConfig.textureSizeLimit}`);
+    if (avatarConfig?.textureAtlas) queryParams.push(`textureAtlas=${avatarConfig.textureAtlas}`);
+    if (avatarConfig?.morphTargets) queryParams.push(`morphTargets=${avatarConfig.morphTargets.join(',')}`);
 
     if (avatarConfig?.pose) queryParams.push(`pose=${avatarConfig.pose}`);
     if (avatarConfig?.useHands) queryParams.push(`useHands=${avatarConfig.useHands}`);
@@ -51,46 +42,7 @@ export const AvatarCreator: FC<AvatarCreatorProps> = ({subdomain, creatorConfig,
     return `${base}${query ? `?${query}` : ""}`;
   }
 
-  const buildSrc = () => {
-    let src = `https://${subdomain || `demo`}.readyplayer.me`;
-
-    if (creatorConfig?.language) src += `/${creatorConfig.language}`;
-    src += `/avatar?frameApi`;
-    if (creatorConfig?.clearCache) src += '&clearCache';
-    if (creatorConfig?.quickStart) src += '&quickStart';
-    if (creatorConfig?.bodyType) src += `&bodyType=${creatorConfig?.bodyType}`;
-
-    return src;
-  }
-
-  const subscribe = (event: MessageEvent) => {
-    const json = safeParse(event);
-
-    if (json?.source !== 'readyplayerme') {
-      return;
-    }
-
-    switch (json.eventName)  {
-      case EventName.FrameReady:
-        frameRef.current?.contentWindow?.postMessage(JSON.stringify({ target: 'readyplayerme', type: 'subscribe', eventName: 'v1.**'}), '*');
-        break;
-      case EventName.UserSet:
-        onUserSet?.(json.data.id);
-        break;
-      case EventName.AvatarExported:
-        const avatarUrl = buildAvatarUrl(json.data.url);
-        onAvatarExported?.(avatarUrl);
-        break;
-    }
-  }
-
-  function safeParse(event: MessageEvent) {
-    try {
-      return JSON.parse(event.data);
-    } catch (error) {
-      return null;
-    }
-  }
-
-  return <iframe ref={frameRef} src={buildSrc()} style={style} allow="camera *; clipboard-write" />
-};
+  return  url == "" ? 
+    <AvatarEditor subdomain={subdomain} editorConfig={editorConfig} onUserSet={onUserSet} onAvatarExported={handleOnAvatarExported}/> :
+    <AvatarViewer url={url} bodyType={editorConfig?.bodyType} animationUrl={viewerConfig?.animationUrl} onLoaded={onAvatarLoaded} style={viewerConfig?.style} className={viewerConfig?.className}/>
+}
