@@ -1,12 +1,12 @@
 import React from 'react';
 import { Meta } from '@storybook/react';
-import { ReadyPlayerMe } from '../src/index';
+import { AvatarCreator, AvatarCreatorProps } from '../src/components/avatar-creator';
 
 const meta: Meta = {
-  title: 'Welcome',
-  component: ReadyPlayerMe,
+  title: 'Avatar Creator',
+  component: AvatarCreator,
   argTypes: {
-
+    
   },
   parameters: {
     controls: { expanded: true },
@@ -15,7 +15,9 @@ const meta: Meta = {
 
 export default meta;
 
-const Template = (args) => <ReadyPlayerMe {...args} />;
+const Template = (args: AvatarCreatorProps) => <div style={{height: 800, borderRadius: 8, overflow: 'hidden'}}>
+  <AvatarCreator {...args} />;
+</div>
 
 // By passing using the Args format for exported stories, you can control the props for a component for reuse in a test
 // https://storybook.js.org/docs/react/workflows/unit-testing
