@@ -2,6 +2,8 @@
 
 **Ready Player Me React SDK** is a set of components and helper methods to help implementing Ready Player Me into React projects. With this SDK you can display Ready Player Me editor in your React project, create, edit and display avatars.
 
+You can visit SDK Storybook and test the components here: https://readyplayerme.github.io/rpm-react-sdk
+
 ## Installation
 Ready Player Me React SDK is available as an [npm package](https://www.npmjs.com/package/@readyplayerme/rpm-react-sdk).
 
@@ -22,6 +24,7 @@ export default function App() {
   );
 }
 ```
+
 
 https://user-images.githubusercontent.com/3163281/235168912-a9dacd91-af3a-4b35-81c3-b025e12e333a.mp4
 
