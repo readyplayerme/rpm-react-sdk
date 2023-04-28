@@ -1,53 +1,110 @@
-# Ready Player Me Web SDK
+# Ready Player Me React SDK
 
- React components for implementing Ready Player Me on web.
+**Ready Player Me React SDK** is a set of components and helper methods to help implementing Ready Player Me into React projects. With this SDK you can display Ready Player Me editor in your React project, create, edit and display avatars.
+
+## Installation
+Ready Player Me React SDK is available as an [npm package](https://www.npmjs.com/package/@readyplayerme/rpm-react-sdk).
+
+```bash
+npm i @readyplayerme/rpm-react-sdk
+```
+
+## Usage
+
+```tsx
+import { AvatarEditor } from '@readyplayerme/rpm-react-sdk';
+
+export default function App() {
+  return (
+    <div>
+      <AvatarCreator subdomain="demo"/>
+    </div>
+  );
+}
+```
+
+![how it works](./public/how-it-works.gif)
+
+---
+
+# Components
 
 ## Avatar Editor
 
 Avatar Editor component helps you load Ready Player Me in an iframe where you can edit your avatar and receive your avatar URL as a post message once your avatar is exported.
 
-```tsx
-    <AvatarEditor subdomain="demo"/>
-```
+### Parameters
 
-You can pass an Editor Config to Avatar Creator component to change your user experience. Read more about thes options [here](https://docs.readyplayer.me/ready-player-me/integration-guides/web-and-native-integration/avatar-creator-integration#configuration-1).
+**subdomain** *[required]*: string 
+- Your Ready Player Me subdomain. You can get one from [Ready Player Me Studio](https://studio.readyplayer.me/).
+
+**editorConfig** *[optional]*: EditorConfig
+- Editor Configurations. Read more about these options in [Ready Player Me documentations](https://docs.readyplayer.me/ready-player-me/integration-guides/web-and-native-integration/avatar-creator-integration#configuration-1).
+
+**onAvatarExported** *[required]*: (url: string) => void
+- Callback function that is called when avatar is exported.
+
+**onUserSet** *[optional]*: (userId: string) => void
+- Callback function that is called when user id is set.
+
+### Example
 
 ```tsx
 const config: EditorConfig  = {
-    clearCache: true;
-    bodyType: 'halfbody';
-    quickStart: 'false';
-    language: 'tr';
+  clearCache: true;
+  bodyType: 'halfbody';
+  quickStart: 'false';
+  language: 'tr';
 }
 
-<AvatarEditor subdomain="demo" editorConfig={config}/>
-```
-
-You can also receive notifications when user avatar is exported and user id is set.
-
-```tsx
 const handleOnUserSet = (userId: string) => {
-    console.log(`User ID is: ${userId}`)
+  console.log(`User ID is: ${userId}`)
 }
 
-const handleOnAvatarExported = (userId: string) => {
-    console.log(`User ID is: ${userId}`)
+const handleOnAvatarExported = (url;: string) => {
+  console.log(`Avatar URL is: ${url}`)
 }
 
-<AvatarEditor subdomain="demo" onUserSet={handleOnUserSet} onAvatarExported={handleOnAvatarExported}/>
+<AvatarEditor subdomain="demo" editorConfig={config} onUserSet={handleOnUserSet} onAvatarExported={handleOnAvatarExported}/>
 ```
-
-## Avatar Viewer
-
-Avatar Viewer is a wrapper on top of [Ready Player Me Visage](https://www.npmjs.com/package/@readyplayerme/visage) for simplifying the use of the component in Avatar Creator. If you need more customzied user experience in 3D canvas please check Visage out.
 
 ## Avatar Creator
 
-Avatar Creator is the combination of Avatar Editor and Avatar Viewer components that helps you use Ready Player Me avatar creator and load the generated avatar with the given configurations into a 3D canvas where you can display it.
+Avatar Creator component is the combination of Avatar Editor component and [Ready Player Me Visage](https://github.com/readyplayerme/visage) components that helps load the generated avatar with the given configurations into a 3D canvas where you can display it.
 
-Addition to the Editor Config, Avatar Creator takes Viewer Config and Avatar Config parameters to modify the viewer visuals and result avatar quality.
+### Parameters
+
+**subdomain** *[required]*: string
+- Your Ready Player Me subdomain. You can get one from [Ready Player Me Studio](https://studio.readyplayer.me).
+
+**editorConfig** *[optional]*: EditorConfig
+- Editor Configurations where you can set url properties of Ready Player Me editor. Read more about these options in [Ready Player Me documentations](https://docs.readyplayer.me/ready-player-me/integration-guides/web-and-native-integration/avatar-creator-integration#configuration-1).
+
+**avatarConfig** *[optional]*: AvatarConfig
+- Avatar Configurations that changes the optimization properties of the generated GLB avatar model. Read more about these options in [Ready Player Me documentations](https://docs.readyplayer.me/ready-player-me/api-reference/avatar-rest-api/get-3d-avatars).
+
+**viewerConfig** *[optional]*: ViewerConfig
+- Viewer Configurations that changes the properties of the 3D canvas where the avatar is displayed.
+
+**onUserSet** *[optional]*: (id: string) => void
+- Callback function that is called when user id is set.
+
+**onAvatarLoaded** *[optional]*: () => void
+- Callback function that is called when avatar is loaded.
+
+**onAvatarExported** *[optional]*: (url: string) => void
+- Callback function that is called when avatar is exported.
+
+### Example
 
 ```tsx
+const editorConfig: EditorConfig  = {
+  clearCache: true;
+  bodyType: 'halfbody';
+  quickStart: 'false';
+  language: 'tr';
+};
+
 const avatarConfig: AvatarConfig = {
   meshLod: 2,
   textureAtlas: 512,
@@ -61,7 +118,19 @@ const viewerConfig: ViewerConfig = {
   style: {backgroundColor: "#ddd"}
 };
 
-<AvatarCreator subdomain="demo" avatarConfig={avatarConfig} viewerConfig={viewerConfig}/>
-```
+const handleOnUserSet = (id: string) => {
+  console.log(`User ID is: ${id}`)
+}
 
-You can find all the avatar configuration options [here](https://docs.readyplayer.me/ready-player-me/api-reference/avatar-rest-api/get-3d-avatars).
+const handleOnAvatarExported = (url: string) => {
+  console.log(`Avatar URL is: ${url}`)
+}
+
+const handleOnAvatarLoaded = () => {
+  console.log(`Avatar is loaded`)
+}
+
+<AvatarCreator subdomain="demo" 
+  editorConfig={editorConfig} avatarConfig={avatarConfig} viewerConfig={viewerConfig} 
+  handleOnUserSet={handleOnUserSet} handleOnAvatarExported={handleOnAvatarExported} handleOnAvatarLoaded={handleOnAvatarLoaded}/>
+```

@@ -12,30 +12,32 @@ export default meta;
 type Story = StoryObj<AvatarCreatorProps>;
 
 export const Default: Story = {
-    render : (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
-    args: {
-      subdomain: 'demo',
-    }
+  render: (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
+  args: {
+    subdomain: 'demo',
+  }
 };
 
 export const HalfBody: Story = {
-  render : (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
+  render: (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
   args: {
     subdomain: 'demo',
     editorConfig: {
       bodyType: 'halfbody',
       clearCache: true,
-    }
+      language: 'en',
+    },
   }
 };
 
 export const LowQuality: Story = {
-  render : (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
+  render: (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
   args: {
     subdomain: 'demo',
     editorConfig: {
       bodyType: 'fullbody',
       clearCache: true,
+      language: 'en',
     },
     avatarConfig: {
       quality: 'low',
@@ -50,17 +52,36 @@ export const LowQuality: Story = {
 };
 
 export const TPose: Story = {
-  render : (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
+  render: (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
   args: {
     subdomain: 'demo',
     editorConfig: {
       bodyType: 'fullbody',
       clearCache: true,
+      language: 'en',
     },
     avatarConfig: {
       pose: 'T',
     },
     viewerConfig: {
+      loadingNode: 'Loading...',
+      style: {
+        backgroundColor: '#ddd',
+      }
+    }
+  }
+};
+
+export const Animated: Story = {
+  render: (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
+  args: {
+    subdomain: 'demo',
+    editorConfig: {
+      clearCache: true,
+      language: 'en',
+    },
+    viewerConfig: {
+      animationUrl: './male-idle.glb',
       loadingNode: 'Loading...',
       style: {
         backgroundColor: '#ddd',
