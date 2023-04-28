@@ -21,3 +21,4 @@ jobs:
       with:
         branch: gh-pages
         folder: storybook-static
+        target-folder: docs
