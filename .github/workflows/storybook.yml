@@ -1,0 +1,20 @@
+on: 
+  push:
+    paths: ["stories/**", "src/components/**"]
+
+name: Publish stories if changed
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Build and deploy to storybook-static branch
+      uses: JamesIves/github-pages-deploy-action@2.0.3
+      env:
+        ACCESS_TOKEN: ${{ secrets.BDOUGIE_TOKEN }}
+        BRANCH: storybook-static
+        FOLDER: storybook-static
+        BUILD_SCRIPT: npm install && npm run build-storybook
