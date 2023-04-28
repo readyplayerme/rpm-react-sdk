@@ -90,3 +90,34 @@ export const Animated: Story = {
     }
   }
 };
+
+const CustomLoadingNodeComponent = <div style={{ color: 'orange', backgroundColor: 'black', height: '100%', width: '100%' }}>
+  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ fontSize: '2rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
+        CUSTOM LOADING NODE
+      </div>
+    </div>
+  </div>
+</div>
+
+export const CustomLoadingNode: Story = {
+  render: (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
+  args: {
+    subdomain: 'demo',
+    avatarConfig: {
+      quality: 'low',
+    },
+    editorConfig: {
+      clearCache: true,
+      bodyType: 'fullbody',
+      language: 'en',
+    },
+    viewerConfig: {
+      loadingNode: CustomLoadingNodeComponent,
+      style: {
+        backgroundColor: '#ddd',
+      }
+    }
+  }
+};

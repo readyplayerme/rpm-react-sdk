@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export type BodyType = 'halfbody' | 'fullbody';
 
 export type Language = 'en' | 'en-IE' | 'de' | 'fr' | 'es' | 'es-MX' | 'it' | 'pt' | 'pt-BR' | 'tr' | 'ja' | 'kr' | 'ch';
@@ -11,9 +13,9 @@ export type EditorConfig = {
 
 export type ViewerConfig = {
   animationUrl?: string;
-  loadingNode?: React.ReactNode;
-  style?: React.CSSProperties;
   className?: string;
+  style?: React.CSSProperties;
+  loadingNode?: JSX.Element | string;
 };
 
 export type AvatarConfig = {

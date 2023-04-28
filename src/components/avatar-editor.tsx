@@ -14,7 +14,7 @@ const style: React.CSSProperties = {
   border: 'none',
 };
 
-/** 
+/**
  * AvatarEditor is a React component that allows you to create an avatar using Ready Player Me and receive avatar URL.
  * @param subdomain The subdomain of your Ready Player Me instance.
  * @param editorConfig The configuration for the AvatarEditor component.

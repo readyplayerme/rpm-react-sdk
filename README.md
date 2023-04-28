@@ -4,6 +4,8 @@
 
 You can visit SDK Storybook and test the components here: https://readyplayerme.github.io/rpm-react-sdk
 
+Codesandbox examples are available here: https://codesandbox.io/s/rpm-react-sdk-yii76z
+
 ## Installation
 Ready Player Me React SDK is available as an [npm package](https://www.npmjs.com/package/@readyplayerme/rpm-react-sdk).
 
@@ -14,7 +16,7 @@ npm i @readyplayerme/rpm-react-sdk
 ## Usage
 
 ```tsx
-import { AvatarEditor } from '@readyplayerme/rpm-react-sdk';
+import { AvatarCreator } from '@readyplayerme/rpm-react-sdk';
 
 export default function App() {
   return (

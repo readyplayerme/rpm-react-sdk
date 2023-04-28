@@ -56,5 +56,5 @@ export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig,
   // prettier-ignore
   return url === '' ?
     <AvatarEditor subdomain={subdomain} editorConfig={editorConfig} onUserSet={onUserSet} onAvatarExported={handleOnAvatarExported} /> :
-    <AvatarViewer url={url} bodyType={editorConfig?.bodyType} animationUrl={viewerConfig?.animationUrl} onLoaded={onAvatarLoaded} style={viewerConfig?.style} className={viewerConfig?.className} />
+    <AvatarViewer url={url} bodyType={editorConfig?.bodyType} {...viewerConfig} onLoaded={onAvatarLoaded} />
 };

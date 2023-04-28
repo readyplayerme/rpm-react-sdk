@@ -5,10 +5,10 @@ import { BodyType } from '../types';
 export interface AvatarViewerProps {
   url: string;
   animationUrl?: string;
-  bodyType?: BodyType;
-  style?: React.CSSProperties;
   className?: string;
-  loadingNode?: React.ReactNode;
+  style?: React.CSSProperties;
+  loadingNode?: JSX.Element | string;
+  bodyType?: BodyType;
   onLoaded?: () => void;
 }
 
