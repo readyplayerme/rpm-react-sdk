@@ -2,22 +2,30 @@ on:
   push:
     paths: ["stories/**", "src/components/**"]
 
-name: Publish stories if changed
+name: Build and Deploy Storybook
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' # Trigger release process only on main branch
     steps:
-    - name: Checkout
-      uses: actions/checkout@master
+     - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+    - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '17.x'
 
     - name: Install dependencies
-      run: npm install && npm run build-storybook
+      run: | 
+        npm install
+        npm run build-storybook
       
-    - name: Build and deploy Storybook into Github Pages
+    - name: Build and Deploy
       uses: JamesIves/github-pages-deploy-action@v4.2.5
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         branch: gh-pages
         folder: storybook-static
