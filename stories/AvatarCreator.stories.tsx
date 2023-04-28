@@ -78,6 +78,7 @@ export const Animated: Story = {
     subdomain: 'demo',
     editorConfig: {
       clearCache: true,
+      bodyType: 'fullbody',
       language: 'en',
     },
     viewerConfig: {
