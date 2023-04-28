@@ -11,9 +11,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
 
+    - name: Install dependencies
+      run: npm install && npm run build-storybook
+      
     - name: Build and deploy Storybook into Github Pages
       uses: JamesIves/github-pages-deploy-action@v4.2.5
       env:
-        BRANCH: gh-pages
-        FOLDER: storybook-static
-        BUILD_SCRIPT: npm install && npm run build-storybook
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        branch: gh-pages
+        folder: storybook-static
