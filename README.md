@@ -23,7 +23,7 @@ export default function App() {
 }
 ```
 
-![how it works](./public/how-it-works.mp4)
+https://user-images.githubusercontent.com/3163281/235168912-a9dacd91-af3a-4b35-81c3-b025e12e333a.mp4
 
 ---
 
