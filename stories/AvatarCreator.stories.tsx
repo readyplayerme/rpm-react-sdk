@@ -83,7 +83,7 @@ export const Animated: Story = {
     },
     viewerConfig: {
       animationUrl: './male-idle.glb',
-      loadingNode: 'LOADING...',
+      loadingNode: 'LOADING',
       style: {
         backgroundColor: '#ddd',
       }
