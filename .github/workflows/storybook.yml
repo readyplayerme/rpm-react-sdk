@@ -11,10 +11,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
 
-    - name: Build and deploy to storybook-static branch
-      uses: JamesIves/github-pages-deploy-action@2.0.3
+    - name: Build and deploy Storybook into Github Pages
+      uses: JamesIves/github-pages-deploy-action@v4.2.5
       env:
-        ACCESS_TOKEN: ${{ secrets.BDOUGIE_TOKEN }}
-        BRANCH: storybook-static
+        BRANCH: gh-pages
         FOLDER: storybook-static
         BUILD_SCRIPT: npm install && npm run build-storybook
