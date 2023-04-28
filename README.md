@@ -23,7 +23,7 @@ export default function App() {
 }
 ```
 
-![how it works](./public/how-it-works.gif)
+![how it works](./public/how-it-works.mp4)
 
 ---
 
