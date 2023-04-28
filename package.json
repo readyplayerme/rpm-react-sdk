@@ -1,7 +1,7 @@
 {
-  "name": "@readyplayerme/rpm-web-sdk",
-  "version": "0.1.1",
-  "description": "Ready Player Me Web SDK",
+  "name": "@readyplayerme/rpm-react-sdk",
+  "version": "0.1.0-rc.0",
+  "description": "Ready Player Me React SDK",
   "keywords": [
     "readyplayerme",
     "avatar",
@@ -43,9 +43,6 @@
   "jest": {
     "testEnvironment": "jsdom"
   },
-  "peerDependencies": {
-    "react": ">=16"
-  },
   "engines": {
     "node": ">=12"
   },
@@ -83,6 +80,9 @@
     "tslib": "^2.5.0",
     "typescript": "^5.0.4",
     "vite": "^4.3.1"
+  },
+  "peerDependencies": {
+    "react": ">=16"
   },
   "dependencies": {
     "@readyplayerme/visage": "^3.5.2"

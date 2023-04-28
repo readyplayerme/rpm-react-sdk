@@ -13,6 +13,17 @@ export interface AvatarCreatorProps {
   onAvatarLoaded?: () => void;
 }
 
+/**
+ * AvatarCreator is a React component that allows you to create an avatar using Ready Player Me and display it in a 3D canvas.
+ * @param subdomain The subdomain of your Ready Player Me instance.
+ * @param editorConfig The configuration for the AvatarEditor component.
+ * @param avatarConfig The configuration for the Avatar GLB file.
+ * @param viewerConfig The configuration for the AvatarViewer component.
+ * @param onUserSet A callback that is called when a user is set.
+ * @param onAvatarExported A callback that is called when an avatar is exported.
+ * @param onAvatarLoaded A callback that is called when an avatar is loaded.
+ * @returns A React component.
+ */
 export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig, viewerConfig, avatarConfig, onUserSet, onAvatarExported, onAvatarLoaded }) => {
   const [url, setUrl] = React.useState('');
 
