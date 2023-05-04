@@ -1,5 +1,3 @@
-import { ReactNode } from "react";
-
 export type BodyType = 'halfbody' | 'fullbody';
 
 export type Language = 'en' | 'en-IE' | 'de' | 'fr' | 'es' | 'es-MX' | 'it' | 'pt' | 'pt-BR' | 'tr' | 'ja' | 'kr' | 'ch';
@@ -12,10 +10,17 @@ export type EditorConfig = {
 };
 
 export type ViewerConfig = {
-  animationUrl?: string;
+  poseSrc?: string | Blob;
+  animationSrc?: string | Blob;
   className?: string;
   style?: React.CSSProperties;
-  loadingNode?: JSX.Element | string;
+  halfBody?: boolean;
+  shadows?: boolean;
+  scale?: number;
+  cameraTarget?: number;
+  cameraInitialDistance?: number;
+  idleRotation?: boolean;
+  headMovement?: boolean;
 };
 
 export type AvatarConfig = {

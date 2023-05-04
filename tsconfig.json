@@ -3,6 +3,7 @@
   "extends": "@tsconfig/vite-react/tsconfig.json",
   "include": [
     "src",
-    "types"
+    "types",
+    "utils"
   ],
 }
