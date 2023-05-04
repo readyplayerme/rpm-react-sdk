@@ -1,7 +1,8 @@
 import React from 'react';
+import { Container } from './container';
+import { CustomLoadingNode } from './custom-loading-node';
 import { Meta, StoryObj } from '@storybook/react';
 import { AvatarCreator, AvatarCreatorProps } from '../src/components/avatar-creator';
-import { Container } from './container';
 
 const meta: Meta<AvatarCreatorProps> = {
   title: 'Avatar Creator',
@@ -27,6 +28,13 @@ export const HalfBody: Story = {
       clearCache: true,
       language: 'en',
     },
+    viewerConfig: {
+      halfBody: true,
+      cameraTarget: 0.6,
+    },
+    avatarConfig: {
+      useHands: false,
+    },
   }
 };
 
@@ -43,11 +51,11 @@ export const LowQuality: Story = {
       quality: 'low',
     },
     viewerConfig: {
-      loadingNode: 'Loading...',
       style: {
         backgroundColor: '#ddd',
       }
-    }
+    },
+    loadingNode: 'Loading...',
   }
 };
 
@@ -64,11 +72,11 @@ export const TPose: Story = {
       pose: 'T',
     },
     viewerConfig: {
-      loadingNode: 'Loading...',
       style: {
         backgroundColor: '#ddd',
       }
-    }
+    },
+    loadingNode: 'Loading...',
   }
 };
 
@@ -82,26 +90,16 @@ export const Animated: Story = {
       language: 'en',
     },
     viewerConfig: {
-      animationUrl: './male-idle.glb',
-      loadingNode: 'LOADING...',
+      animationSrc: './male-idle.glb',
       style: {
         backgroundColor: '#ddd',
       }
-    }
+    },
+    loadingNode: 'Loading...',
   }
 };
 
-const CustomLoadingNodeComponent = <div style={{ color: 'orange', backgroundColor: 'black', height: '100%', width: '100%' }}>
-  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-      <div style={{ fontSize: '2rem', fontWeight: 'bold', fontFamily: 'sans-serif' }}>
-        CUSTOM LOADING NODE
-      </div>
-    </div>
-  </div>
-</div>
-
-export const CustomLoadingNode: Story = {
+export const WithCustomLoadingNode: Story = {
   render: (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
   args: {
     subdomain: 'demo',
@@ -114,10 +112,10 @@ export const CustomLoadingNode: Story = {
       language: 'en',
     },
     viewerConfig: {
-      loadingNode: CustomLoadingNodeComponent,
       style: {
         backgroundColor: '#ddd',
       }
-    }
+    },
+    loadingNode: <CustomLoadingNode />,
   }
 };
