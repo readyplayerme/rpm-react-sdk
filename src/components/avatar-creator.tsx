@@ -1,70 +1,61 @@
-import React, { FC } from 'react';
-import { EditorIframe } from './editor-iframe';
-import { AvatarConfig, EditorConfig, ViewerConfig } from '../types';
-import { buildAvatarUrl } from '../utils';
-import { Avatar } from '@readyplayerme/visage';
-
-const containerStyle: React.CSSProperties = {
-  width: '100%',
-  height: '100%',
-  border: 'none',
-  position: 'relative',
-};
-
-const loadingNodeStyle: React.CSSProperties = {
-  width: '100%',
-  height: '100%',
-  display: 'flex',
-  fontSize: '1.5rem',
-  alignItems: 'center',
-  position: 'absolute',
-  justifyContent: 'center',
-  fontFamily: 'sans-serif',
-};
+import React, { FC, useEffect, useRef } from 'react';
+import { EventName, EditorConfig } from '../types';
+import { buildIframeUrl, safeParseJSON } from '../utils';
 
 export interface AvatarCreatorProps {
   subdomain: string;
   editorConfig?: EditorConfig;
-  avatarConfig?: AvatarConfig;
-  viewerConfig?: ViewerConfig;
-  loadingNode?: JSX.Element | string;
   onUserSet?: (id: string) => void;
   onAvatarExported?: (url: string) => void;
-  onAvatarLoaded?: () => void;
 }
 
+const style: React.CSSProperties = {
+  width: '100%',
+  height: '100%',
+  border: 'none',
+};
+
 /**
- * AvatarCreator is a React component that allows you to create an avatar using Ready Player Me and display it in a 3D canvas.
+ * AvatarCreator is a React component that allows you to create an avatar using Ready Player Me and receive avatar URL.
  * @param subdomain The subdomain of your Ready Player Me instance.
- * @param editorConfig The configuration for the AvatarEditor component.
- * @param avatarConfig The configuration for the Avatar GLB file.
- * @param viewerConfig The configuration for the AvatarViewer component.
- * @param loadingNode A React node that is displayed while the avatar is loading.
+ * @param editorConfig The configuration for the AvatarCreator component.
  * @param onUserSet A callback that is called when a user is set.
  * @param onAvatarExported A callback that is called when an avatar is exported.
- * @param onAvatarLoaded A callback that is called when an avatar is loaded.
  * @returns A React component.
  */
-export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig, viewerConfig, avatarConfig, loadingNode, onUserSet, onAvatarExported, onAvatarLoaded }) => {
-  const [url, setUrl] = React.useState('');
-  const [loading, setLoading] = React.useState(true);
+export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig, onUserSet, onAvatarExported }) => {
+  const frameRef = useRef<HTMLIFrameElement>(null);
 
-  const handleOnAvatarExported = (url: string) => {
-    const avatarUrl = buildAvatarUrl(url, avatarConfig);
-    setUrl(avatarUrl);
-    onAvatarExported && onAvatarExported(avatarUrl);
+  const subscribe = (event: MessageEvent) => {
+    const json = safeParseJSON(event);
+
+    if (json?.source !== 'readyplayerme') {
+      return;
+    }
+
+    switch (json.eventName) {
+      case EventName.FrameReady:
+        // Subscribe to all events
+        frameRef.current?.contentWindow?.postMessage(JSON.stringify({ target: 'readyplayerme', type: 'subscribe', eventName: 'v1.**' }), '*');
+        break;
+      case EventName.UserSet:
+        onUserSet?.(json.data.id);
+        break;
+      case EventName.AvatarExported:
+        onAvatarExported?.(json.data.url);
+        break;
+    }
   };
 
-  const handleOnLoaded = () => {
-    setLoading(false);
-    onAvatarLoaded && onAvatarLoaded();
-  };
+  const url = buildIframeUrl(subdomain, editorConfig);
 
-  // prettier-ignore
-  return url === '' ?
-    <EditorIframe subdomain={subdomain} editorConfig={editorConfig} onUserSet={onUserSet} onAvatarExported={handleOnAvatarExported} /> :
-    <div style={containerStyle}>
-      <Avatar {...viewerConfig} modelSrc={url} onLoaded={handleOnLoaded} style={{ ...viewerConfig?.style, position: 'absolute' }} />
-      {loading && <div style={loadingNodeStyle}>{loadingNode || 'Loading...'}</div>}
-    </div>
+  useEffect(() => {
+    window.addEventListener('message', subscribe);
+
+    return () => {
+      window.removeEventListener('message', subscribe);
+    };
+  });
+
+  return <iframe title="Ready Player Me" ref={frameRef} src={url} style={style} allow="camera *; clipboard-write" />;
 };
