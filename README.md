@@ -34,9 +34,9 @@ https://user-images.githubusercontent.com/3163281/235168912-a9dacd91-af3a-4b35-8
 
 # Components
 
-## Avatar Editor
+## Editor Iframe
 
-Avatar Editor component helps you load Ready Player Me in an iframe where you can edit your avatar and receive your avatar URL as a post message once your avatar is exported.
+Editor Iframe component helps you load Ready Player Me in an iframe where you can edit your avatar and receive your avatar URL as a post message once your avatar is exported.
 
 ### Parameters
 
@@ -75,7 +75,7 @@ const handleOnAvatarExported = (url;: string) => {
 
 ## Avatar Creator
 
-Avatar Creator component is the combination of Avatar Editor component and [Ready Player Me Visage](https://github.com/readyplayerme/visage) components that helps load the generated avatar with the given configurations into a 3D canvas where you can display it.
+Avatar Creator component is the combination of Editor Iframe component and [Ready Player Me Visage](https://github.com/readyplayerme/visage) components that helps load the generated avatar with the given configurations into a 3D canvas where you can display it.
 
 ### Parameters
 
@@ -90,6 +90,9 @@ Avatar Creator component is the combination of Avatar Editor component and [Read
 
 **viewerConfig** *[optional]*: ViewerConfig
 - Viewer Configurations that changes the properties of the 3D canvas where the avatar is displayed.
+
+**loadingNode** *[optional]*: JSX.Element | string
+- Loading node that is displayed while avatar is loading.
 
 **onUserSet** *[optional]*: (id: string) => void
 - Callback function that is called when user id is set.
@@ -119,7 +122,6 @@ const avatarConfig: AvatarConfig = {
 
 const viewerConfig: ViewerConfig = {
   animationUrl: "...",
-  loadingNode: <div>Loading your avatar</div>,
   style: {backgroundColor: "#ddd"}
 };
 
@@ -138,4 +140,35 @@ const handleOnAvatarLoaded = () => {
 <AvatarCreator subdomain="demo" 
   editorConfig={editorConfig} avatarConfig={avatarConfig} viewerConfig={viewerConfig} 
   handleOnUserSet={handleOnUserSet} handleOnAvatarExported={handleOnAvatarExported} handleOnAvatarLoaded={handleOnAvatarLoaded}/>
+```
+
+## Using Editor Iframe with Visage
+
+If you would like to use Visage with it's full capability to edit camera and light properties of the scene and more, you can use Editor Iframe component and Visage components together.
+
+```tsx
+import { Avatar } from '@readyplayerme/visage';
+import { AvatarEditor, AvatarViewer } from '@readyplayerme/rpm-react-sdk';
+
+const subdomain = 'demo';
+
+const editorConfig: EditorConfig  = {
+  clearCache: true;
+  bodyType: 'fullbody';
+  quickStart: 'false';
+  language: 'tr';
+};
+
+export const YourCustomComponent = () => {
+  const [url, setUrl] = useState<string | undefined>(undefined);
+
+  const handleOnAvatarExported = (url: string) => {
+    setUrl(url);
+  }
+
+  return <div>
+    <EditorIframe subdomain={subdomain} editorConnfig={editorConfig} onAvatarExported={handleOnAvatarExported} />
+    <Avatar modelSrc={url} />
+  </div>
+}
 ```
