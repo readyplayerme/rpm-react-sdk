@@ -1,7 +1,8 @@
 import React, { FC, useEffect, useRef } from 'react';
 import { EventName, EditorConfig } from '../types';
+import { buildIframeUrl, safeParseJSON } from '../utils';
 
-export interface AvatarEditorProps {
+export interface EditorIframeProps {
   subdomain: string;
   editorConfig?: EditorConfig;
   onUserSet?: (id: string) => void;
@@ -15,30 +16,18 @@ const style: React.CSSProperties = {
 };
 
 /**
- * AvatarEditor is a React component that allows you to create an avatar using Ready Player Me and receive avatar URL.
+ * EditorIframe is a React component that allows you to create an avatar using Ready Player Me and receive avatar URL.
  * @param subdomain The subdomain of your Ready Player Me instance.
- * @param editorConfig The configuration for the AvatarEditor component.
+ * @param editorConfig The configuration for the EditorIframe component.
  * @param onUserSet A callback that is called when a user is set.
  * @param onAvatarExported A callback that is called when an avatar is exported.
  * @returns A React component.
  */
-export const AvatarEditor: FC<AvatarEditorProps> = ({ subdomain, editorConfig, onUserSet, onAvatarExported }) => {
+export const EditorIframe: FC<EditorIframeProps> = ({ subdomain, editorConfig, onUserSet, onAvatarExported }) => {
   const frameRef = useRef<HTMLIFrameElement>(null);
 
-  const buildSrc = () => {
-    let src = `https://${subdomain || `demo`}.readyplayer.me`;
-
-    if (editorConfig?.language) src += `/${editorConfig.language}`;
-    src += `/avatar?frameApi`;
-    if (editorConfig?.clearCache) src += '&clearCache';
-    if (editorConfig?.quickStart) src += '&quickStart';
-    if (editorConfig?.bodyType) src += `&bodyType=${editorConfig?.bodyType}`;
-
-    return src;
-  };
-
   const subscribe = (event: MessageEvent) => {
-    const json = safeParse(event);
+    const json = safeParseJSON(event);
 
     if (json?.source !== 'readyplayerme') {
       return;
@@ -46,6 +35,7 @@ export const AvatarEditor: FC<AvatarEditorProps> = ({ subdomain, editorConfig, o
 
     switch (json.eventName) {
       case EventName.FrameReady:
+        // Subscribe to all events
         frameRef.current?.contentWindow?.postMessage(JSON.stringify({ target: 'readyplayerme', type: 'subscribe', eventName: 'v1.**' }), '*');
         break;
       case EventName.UserSet:
@@ -57,6 +47,8 @@ export const AvatarEditor: FC<AvatarEditorProps> = ({ subdomain, editorConfig, o
     }
   };
 
+  const url = buildIframeUrl(subdomain, editorConfig);
+
   useEffect(() => {
     window.addEventListener('message', subscribe);
 
@@ -65,13 +57,5 @@ export const AvatarEditor: FC<AvatarEditorProps> = ({ subdomain, editorConfig, o
     };
   });
 
-  function safeParse(event: MessageEvent) {
-    try {
-      return JSON.parse(event.data);
-    } catch (error) {
-      return null;
-    }
-  }
-
-  return <iframe title="Ready Player Me" ref={frameRef} src={buildSrc()} style={style} allow="camera *; clipboard-write" />;
+  return <iframe title="Ready Player Me" ref={frameRef} src={url} style={style} allow="camera *; clipboard-write" />;
 };

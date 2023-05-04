@@ -1,13 +1,33 @@
 import React, { FC } from 'react';
-import { AvatarViewer } from './avatar-viewer';
-import { AvatarEditor } from './avatar-editor';
+import { EditorIframe } from './editor-iframe';
 import { AvatarConfig, EditorConfig, ViewerConfig } from '../types';
+import { buildAvatarUrl } from '../utils';
+import { Avatar } from '@readyplayerme/visage';
+
+const containerStyle: React.CSSProperties = {
+  width: '100%',
+  height: '100%',
+  border: 'none',
+  position: 'relative',
+};
+
+const loadingNodeStyle: React.CSSProperties = {
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  fontSize: '1.5rem',
+  alignItems: 'center',
+  position: 'absolute',
+  justifyContent: 'center',
+  fontFamily: 'sans-serif',
+};
 
 export interface AvatarCreatorProps {
   subdomain: string;
   editorConfig?: EditorConfig;
   avatarConfig?: AvatarConfig;
   viewerConfig?: ViewerConfig;
+  loadingNode?: JSX.Element | string;
   onUserSet?: (id: string) => void;
   onAvatarExported?: (url: string) => void;
   onAvatarLoaded?: () => void;
@@ -19,42 +39,32 @@ export interface AvatarCreatorProps {
  * @param editorConfig The configuration for the AvatarEditor component.
  * @param avatarConfig The configuration for the Avatar GLB file.
  * @param viewerConfig The configuration for the AvatarViewer component.
+ * @param loadingNode A React node that is displayed while the avatar is loading.
  * @param onUserSet A callback that is called when a user is set.
  * @param onAvatarExported A callback that is called when an avatar is exported.
  * @param onAvatarLoaded A callback that is called when an avatar is loaded.
  * @returns A React component.
  */
-export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig, viewerConfig, avatarConfig, onUserSet, onAvatarExported, onAvatarLoaded }) => {
+export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig, viewerConfig, avatarConfig, loadingNode, onUserSet, onAvatarExported, onAvatarLoaded }) => {
   const [url, setUrl] = React.useState('');
+  const [loading, setLoading] = React.useState(true);
 
   const handleOnAvatarExported = (url: string) => {
-    const avatarUrl = buildAvatarUrl(url);
+    const avatarUrl = buildAvatarUrl(url, avatarConfig);
     setUrl(avatarUrl);
     onAvatarExported && onAvatarExported(avatarUrl);
   };
 
-  const buildAvatarUrl = (base: string) => {
-    const queryParams: string[] = [];
-
-    if (avatarConfig?.quality) queryParams.push(`quality=${avatarConfig.quality}`);
-    if (avatarConfig?.meshLod) queryParams.push(`meshLod=${avatarConfig.meshLod}`);
-    if (avatarConfig?.textureSizeLimit) queryParams.push(`textureSizeLimit=${avatarConfig.textureSizeLimit}`);
-    if (avatarConfig?.textureAtlas) queryParams.push(`textureAtlas=${avatarConfig.textureAtlas}`);
-    if (avatarConfig?.morphTargets) queryParams.push(`morphTargets=${avatarConfig.morphTargets.join(',')}`);
-
-    if (avatarConfig?.pose) queryParams.push(`pose=${avatarConfig.pose}`);
-    if (avatarConfig?.useHands) queryParams.push(`useHands=${avatarConfig.useHands}`);
-    if (avatarConfig?.textureChannels) queryParams.push(`textureChannels=${avatarConfig.textureChannels.join(',')}`);
-
-    if (avatarConfig?.useDracoCompression) queryParams.push(`useDracoCompression=${avatarConfig.useDracoCompression}`);
-    if (avatarConfig?.useMeshOptCompression) queryParams.push(`useMeshOptCompression=${avatarConfig.useMeshOptCompression}`);
-
-    const query = queryParams.join('&');
-    return `${base}${query ? `?${query}` : ''}`;
+  const handleOnLoaded = () => {
+    setLoading(false);
+    onAvatarLoaded && onAvatarLoaded();
   };
 
   // prettier-ignore
   return url === '' ?
-    <AvatarEditor subdomain={subdomain} editorConfig={editorConfig} onUserSet={onUserSet} onAvatarExported={handleOnAvatarExported} /> :
-    <AvatarViewer url={url} bodyType={editorConfig?.bodyType} {...viewerConfig} onLoaded={onAvatarLoaded} />
+    <EditorIframe subdomain={subdomain} editorConfig={editorConfig} onUserSet={onUserSet} onAvatarExported={handleOnAvatarExported} /> :
+    <div style={containerStyle}>
+      <Avatar {...viewerConfig} modelSrc={url} onLoaded={handleOnLoaded} style={{ ...viewerConfig?.style, position: 'absolute' }} />
+      {loading && <div style={loadingNodeStyle}>{loadingNode || 'Loading...'}</div>}
+    </div>
 };
