@@ -6,5 +6,5 @@ interface ContainerProps {
 }
 
 export const Container : FC<ContainerProps> = ({children}: ContainerProps) => {
-    return <div style={{height: 700, width: 700, marginLeft: 'auto', marginRight: 'auto', borderRadius: 8, overflow: 'hidden'}}>{children}</div>
+    return <div style={{height: 700, width: 800, marginLeft: 'auto', marginRight: 'auto', borderRadius: 8, overflow: 'hidden'}}>{children}</div>
 }

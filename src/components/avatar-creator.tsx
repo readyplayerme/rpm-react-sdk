@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef } from 'react';
-import { EventName, EditorConfig } from '../types';
+import { EventName, EditorConfig, AssetRecord } from '../types';
 import { buildIframeUrl, safeParseJSON } from '../utils';
 
 export interface AvatarCreatorProps {
