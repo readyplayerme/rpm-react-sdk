@@ -7,6 +7,8 @@ export interface AvatarCreatorProps {
   editorConfig?: EditorConfig;
   onUserSet?: (id: string) => void;
   onAvatarExported?: (url: string) => void;
+  onUserAuthorized?: (url: string) => void;
+  onAssetUnlock?: (assetRecord: AssetRecord) => void;
 }
 
 const style: React.CSSProperties = {
@@ -23,7 +25,7 @@ const style: React.CSSProperties = {
  * @param onAvatarExported A callback that is called when an avatar is exported.
  * @returns A React component.
  */
-export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig, onUserSet, onAvatarExported }) => {
+export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig, onUserSet, onAvatarExported, onUserAuthorized, onAssetUnlock }) => {
   const frameRef = useRef<HTMLIFrameElement>(null);
 
   const subscribe = (event: MessageEvent) => {
@@ -43,6 +45,13 @@ export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig,
         break;
       case EventName.AvatarExported:
         onAvatarExported?.(json.data.url);
+        break;
+      case EventName.UserAuthorized:
+        onUserAuthorized?.(json.data.id);
+        break;
+      case EventName.AssetUnlock:
+        const assetRecord: AssetRecord = { userId: json.data.userId, assetId: json.data.assetId };
+        onAssetUnlock?.(assetRecord);
         break;
     }
   };
