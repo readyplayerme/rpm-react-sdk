@@ -17,6 +17,9 @@ const style: React.CSSProperties = {
   border: 'none',
 };
 
+const messageEvent = 'message';
+const rpmTarget = 'readyplayerme';
+
 /**
  * AvatarCreator is a React component that allows you to create an avatar using Ready Player Me and receive avatar URL.
  * @param subdomain The subdomain of your Ready Player Me instance.
@@ -31,14 +34,14 @@ export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig,
   const subscribe = (event: MessageEvent) => {
     const json = safeParseJSON(event);
 
-    if (json?.source !== 'readyplayerme') {
+    if (json?.source !== rpmTarget) {
       return;
     }
 
     switch (json.eventName) {
       case EventName.FrameReady:
         // Subscribe to all events
-        frameRef.current?.contentWindow?.postMessage(JSON.stringify({ target: 'readyplayerme', type: 'subscribe', eventName: 'v1.**' }), '*');
+        frameRef.current?.contentWindow?.postMessage(JSON.stringify({ target: rpmTarget, type: 'subscribe', eventName: 'v1.**' }), '*');
         break;
       case EventName.UserSet:
         onUserSet?.(json.data.id);
@@ -59,10 +62,10 @@ export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig,
   const url = buildIframeUrl(subdomain, editorConfig);
 
   useEffect(() => {
-    window.addEventListener('message', subscribe);
+    window.addEventListener(messageEvent, subscribe);
 
     return () => {
-      window.removeEventListener('message', subscribe);
+      window.removeEventListener(messageEvent, subscribe);
     };
   });
 
