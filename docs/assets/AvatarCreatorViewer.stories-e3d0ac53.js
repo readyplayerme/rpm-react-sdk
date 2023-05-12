@@ -1,4 +1,4 @@
-import{j as rn,A as Zx,a as Jx,b as Qx,C as Wo}from"./container-ebf27660.js";import{r as pe,g as w_,R as Ze}from"./index-ebeaab24.js";import{_ as Ud}from"./extends-98964cd2.js";const $x=()=>rn("div",{style:{color:"orange",backgroundColor:"black",height:"100%",width:"100%"},children:rn("div",{style:{display:"flex",justifyContent:"center",alignItems:"center",height:"100%",width:"100%"},children:rn("div",{style:{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"},children:rn("div",{style:{fontSize:"2rem",fontWeight:"bold",fontFamily:"sans-serif"},children:"CUSTOM LOADING NODE"})})})});/**
+import{j as rn,A as Zx,a as Jx,b as Qx,C as Wo}from"./container-df410d56.js";import{r as pe,g as w_,R as Ze}from"./index-ebeaab24.js";import{_ as Ud}from"./extends-98964cd2.js";const $x=()=>rn("div",{style:{color:"orange",backgroundColor:"black",height:"100%",width:"100%"},children:rn("div",{style:{display:"flex",justifyContent:"center",alignItems:"center",height:"100%",width:"100%"},children:rn("div",{style:{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"},children:rn("div",{style:{fontSize:"2rem",fontWeight:"bold",fontFamily:"sans-serif"},children:"CUSTOM LOADING NODE"})})})});/**
  * @license
  * Copyright 2010-2023 Three.js Authors
  * SPDX-License-Identifier: MIT
@@ -3680,4 +3680,4 @@ PERFORMANCE OF THIS SOFTWARE.
     loadingNode: <CustomLoadingNode />
   }
 }`,...(E_=(S_=fu.parameters)==null?void 0:S_.docs)==null?void 0:E_.source}}};const uP=["Default","HalfBody","LowQuality","TPose","Animated","WithCustomLoadingNode"];export{hu as Animated,au as Default,lu as HalfBody,cu as LowQuality,uu as TPose,fu as WithCustomLoadingNode,uP as __namedExportsOrder,cP as default};
-//# sourceMappingURL=AvatarCreatorViewer.stories-0b104be0.js.map
+//# sourceMappingURL=AvatarCreatorViewer.stories-e3d0ac53.js.map

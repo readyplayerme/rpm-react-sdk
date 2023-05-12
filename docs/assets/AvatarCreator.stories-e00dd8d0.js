@@ -1,4 +1,4 @@
-import{A as a,j as r,C as d}from"./container-ebf27660.js";import"./index-ebeaab24.js";const S={title:"Avatar Creator",component:a},n={render:e=>r(d,{children:r(a,{...e})}),args:{subdomain:"demo",editorConfig:{clearCache:!0,language:"en"}}},o={render:e=>r(d,{children:r(a,{...e})}),args:{subdomain:"demo",editorConfig:{bodyType:"halfbody",clearCache:!0,language:"en"}}},t={render:e=>r(d,{children:r(a,{...e})}),args:{subdomain:"demo",editorConfig:{quickStart:!0,clearCache:!0,language:"en"}}},s={render:e=>r(d,{children:r(a,{...e})}),args:{subdomain:"demo",editorConfig:{language:"de",clearCache:!0}}};var c,i,g;n.parameters={...n.parameters,docs:{...(c=n.parameters)==null?void 0:c.docs,source:{originalSource:`{
+import{A as a,j as r,C as d}from"./container-df410d56.js";import"./index-ebeaab24.js";const S={title:"Avatar Creator",component:a},n={render:e=>r(d,{children:r(a,{...e})}),args:{subdomain:"demo",editorConfig:{clearCache:!0,language:"en"}}},o={render:e=>r(d,{children:r(a,{...e})}),args:{subdomain:"demo",editorConfig:{bodyType:"halfbody",clearCache:!0,language:"en"}}},t={render:e=>r(d,{children:r(a,{...e})}),args:{subdomain:"demo",editorConfig:{quickStart:!0,clearCache:!0,language:"en"}}},s={render:e=>r(d,{children:r(a,{...e})}),args:{subdomain:"demo",editorConfig:{language:"de",clearCache:!0}}};var c,i,g;n.parameters={...n.parameters,docs:{...(c=n.parameters)==null?void 0:c.docs,source:{originalSource:`{
   render: (args: AvatarCreatorProps) => <Container><AvatarCreator {...args} /></Container>,
   args: {
     subdomain: 'demo',
@@ -37,4 +37,4 @@ import{A as a,j as r,C as d}from"./container-ebf27660.js";import"./index-ebeaab2
     }
   }
 }`,...(A=(h=s.parameters)==null?void 0:h.docs)==null?void 0:A.source}}};const k=["Default","Halfbody","QuickStart","LanguageGerman"];export{n as Default,o as Halfbody,s as LanguageGerman,t as QuickStart,k as __namedExportsOrder,S as default};
-//# sourceMappingURL=AvatarCreator.stories-60c54f35.js.map
+//# sourceMappingURL=AvatarCreator.stories-e00dd8d0.js.map
