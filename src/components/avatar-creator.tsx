@@ -1,10 +1,11 @@
 import React, { FC, useEffect, useRef } from 'react';
-import { EventName, EditorConfig, AssetRecord } from '../types';
-import { buildIframeUrl, safeParseJSON } from '../utils';
+import { EventName, EditorConfig, AvatarConfig, AssetRecord } from '../types';
+import { buildAvatarUrl, buildIframeUrl, safeParseJSON } from '../utils';
 
 export interface AvatarCreatorProps {
   subdomain: string;
   editorConfig?: EditorConfig;
+  avatarConfig?: AvatarConfig;
   onUserSet?: (id: string) => void;
   onAvatarExported?: (url: string) => void;
   onUserAuthorized?: (url: string) => void;
@@ -24,14 +25,15 @@ const rpmTarget = 'readyplayerme';
  * AvatarCreator is a React component that allows you to create an avatar using Ready Player Me and receive avatar URL.
  * @param subdomain The subdomain of your Ready Player Me instance.
  * @param editorConfig The configuration for the AvatarCreator component.
+ * @param avatarConfig The configuration for the Avatar GLB file.
  * @param onUserSet A callback that is called when a user is set.
  * @param onAvatarExported A callback that is called when an avatar is exported.
  * @returns A React component.
  */
-export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig, onUserSet, onAvatarExported, onUserAuthorized, onAssetUnlock }) => {
+export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig, avatarConfig, onUserSet, onAvatarExported, onUserAuthorized, onAssetUnlock }) => {
   const frameRef = useRef<HTMLIFrameElement>(null);
 
-  const subscribe = (event: MessageEvent) => {
+  const subscribe = (event: any) => {
     const json = safeParseJSON(event);
 
     if (json?.source !== rpmTarget) {
@@ -47,7 +49,8 @@ export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig,
         onUserSet?.(json.data.id);
         break;
       case EventName.AvatarExported:
-        onAvatarExported?.(json.data.url);
+        const avatarUrl = buildAvatarUrl(json.data.url, avatarConfig);
+        onAvatarExported?.(avatarUrl);
         break;
       case EventName.UserAuthorized:
         onUserAuthorized?.(json.data.id);

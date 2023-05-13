@@ -52,12 +52,12 @@ export const AvatarCreatorViewer: FC<AvatarCreatorViewerProps> = ({ subdomain, e
   const handleOnAvatarExported = (url: string) => {
     const avatarUrl = buildAvatarUrl(url, avatarConfig);
     setUrl(avatarUrl);
-    onAvatarExported && onAvatarExported(avatarUrl);
+    onAvatarExported?.(avatarUrl);
   };
 
   const handleOnLoaded = () => {
     setLoading(false);
-    onAvatarLoaded && onAvatarLoaded();
+    onAvatarLoaded?.();
   };
 
   // prettier-ignore
