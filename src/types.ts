@@ -44,6 +44,13 @@ export enum EventName {
   UserSet = 'v1.user.set',
   UserUpdated = 'v1.user.updated',
   UserLogout = 'v1.user.logout',
+  UserAuthorized = 'v1.user.authorized',
+  AssetUnlock = "v1.asset.unlock"
+}
+
+export type AssetRecord = {
+  userId: string;
+  assetId: string;
 }
 
 export enum TextureChannel {

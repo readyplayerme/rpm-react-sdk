@@ -43,7 +43,10 @@ AvatarCreator component helps you load Ready Player Me in an iframe where you ca
 - Your Ready Player Me subdomain. You can get one from [Ready Player Me Studio](https://studio.readyplayer.me/).
 
 **editorConfig** *[optional]*: EditorConfig
-- Editor Configurations. Read more about these options in [Ready Player Me documentations](https://docs.readyplayer.me/ready-player-me/integration-guides/web-and-native-integration/avatar-creator-integration#configuration-1).
+- Editor Configuration is where you can set url properties of Ready Player Me editor. Read more about these options in [Ready Player Me documentations](https://docs.readyplayer.me/ready-player-me/integration-guides/web-and-native-integration/avatar-creator-integration#configuration-1).
+
+**avatarConfig** *[optional]*: AvatarConfig
+- Avatar Configuration is that changes the optimization properties of the generated GLB avatar model. Read more about these options in [Ready Player Me documentations](https://docs.readyplayer.me/ready-player-me/api-reference/avatar-rest-api/get-3d-avatars).
 
 **onAvatarExported** *[required]*: (url: string) => void
 - Callback function that is called when avatar is exported.
@@ -61,6 +64,13 @@ const config: EditorConfig  = {
   language: 'tr';
 }
 
+const avatarConfig: AvatarConfig = {
+  meshLod: 2,
+  textureAtlas: 512,
+  morphTargets: 'ARKit',
+  pose: 'T',
+};
+
 const handleOnUserSet = (userId: string) => {
   console.log(`User ID is: ${userId}`)
 }
@@ -69,10 +79,11 @@ const handleOnAvatarExported = (url;: string) => {
   console.log(`Avatar URL is: ${url}`)
 }
 
-<AvatarCreator subdomain="demo" editorConfig={config} onUserSet={handleOnUserSet} onAvatarExported={handleOnAvatarExported}/>
+<AvatarCreator subdomain="demo" editorConfig={config} avatarConfig={avatarConfig} 
+  onUserSet={handleOnUserSet} onAvatarExported={handleOnAvatarExported}/>
 ```
 
-## Avatar Creator
+## AvatarCreatorViewer
 
 Avatar Creator component is the combination of AvatarCreator component and [Ready Player Me Visage](https://github.com/readyplayerme/visage) components that helps load the generated avatar with the given configurations into a 3D canvas where you can display it.
 
@@ -138,7 +149,7 @@ const handleOnAvatarLoaded = () => {
 
 <AvatarCreatorViewer subdomain="demo" 
   editorConfig={editorConfig} avatarConfig={avatarConfig} viewerConfig={viewerConfig} 
-  handleOnUserSet={handleOnUserSet} handleOnAvatarExported={handleOnAvatarExported} handleOnAvatarLoaded={handleOnAvatarLoaded}/>
+  onUserSet={handleOnUserSet} onAvatarExported={handleOnAvatarExported} onAvatarLoaded={handleOnAvatarLoaded}/>
 ```
 
 ## Using AvatarCreator with Visage

@@ -18,6 +18,9 @@ export const Default: Story = {
     editorConfig: {
       clearCache: true,
       language: 'en',
+    },
+    onAvatarExported: (url: string) => {
+      console.log('URL: ', url);
     }
   }
 };
