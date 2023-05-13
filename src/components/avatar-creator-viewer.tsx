@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { AvatarCreator } from './avatar-creator';
-import { AvatarConfig, EditorConfig, ViewerConfig } from '../types';
+import { AssetRecord, AvatarConfig, EditorConfig, ViewerConfig } from '../types';
 import { buildAvatarUrl } from '../utils';
 import { Avatar } from '@readyplayerme/visage';
 
@@ -30,6 +30,8 @@ export interface AvatarCreatorViewerProps {
   loadingNode?: JSX.Element | string;
   onUserSet?: (id: string) => void;
   onAvatarExported?: (url: string) => void;
+  onUserAuthorized?: (url: string) => void;
+  onAssetUnlock?: (assetRecord: AssetRecord) => void;
   onAvatarLoaded?: () => void;
 }
 
@@ -43,9 +45,11 @@ export interface AvatarCreatorViewerProps {
  * @param onUserSet A callback that is called when a user is set.
  * @param onAvatarExported A callback that is called when an avatar is exported.
  * @param onAvatarLoaded A callback that is called when an avatar is loaded.
+ * @param onUserAuthorized A callback that is called when a user is authorized.
+ * @param onAssetUnlock A callback that is called when an asset unlock button is pressed in RPM.
  * @returns A React component.
  */
-export const AvatarCreatorViewer: FC<AvatarCreatorViewerProps> = ({ subdomain, editorConfig, viewerConfig, avatarConfig, loadingNode, onUserSet, onAvatarExported, onAvatarLoaded }) => {
+export const AvatarCreatorViewer: FC<AvatarCreatorViewerProps> = ({ subdomain, editorConfig, viewerConfig, avatarConfig, loadingNode, onUserSet, onAvatarExported, onAvatarLoaded, onUserAuthorized, onAssetUnlock }) => {
   const [url, setUrl] = React.useState('');
   const [loading, setLoading] = React.useState(true);
 
@@ -62,7 +66,7 @@ export const AvatarCreatorViewer: FC<AvatarCreatorViewerProps> = ({ subdomain, e
 
   // prettier-ignore
   return url === '' ?
-    <AvatarCreator subdomain={subdomain} editorConfig={editorConfig} onUserSet={onUserSet} onAvatarExported={handleOnAvatarExported} /> :
+    <AvatarCreator subdomain={subdomain} editorConfig={editorConfig} onUserSet={onUserSet} onAvatarExported={handleOnAvatarExported} onAssetUnlock={onAssetUnlock} onUserAuthorized={onUserAuthorized} /> :
     <div style={containerStyle}>
       <Avatar {...viewerConfig} modelSrc={url} onLoaded={handleOnLoaded} style={{ ...viewerConfig?.style, position: 'absolute' }} />
       {loading && <div style={loadingNodeStyle}>{loadingNode || 'Loading...'}</div>}

@@ -28,6 +28,8 @@ const rpmTarget = 'readyplayerme';
  * @param avatarConfig The configuration for the Avatar GLB file.
  * @param onUserSet A callback that is called when a user is set.
  * @param onAvatarExported A callback that is called when an avatar is exported.
+ * @param onUserAuthorized A callback that is called when a user is authorized.
+ * @param onAssetUnlock A callback that is called when an asset unlock button is pressed in RPM.
  * @returns A React component.
  */
 export const AvatarCreator: FC<AvatarCreatorProps> = ({ subdomain, editorConfig, avatarConfig, onUserSet, onAvatarExported, onUserAuthorized, onAssetUnlock }) => {
