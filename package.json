@@ -88,6 +88,6 @@
     "react": ">=16"
   },
   "dependencies": {
-    "@readyplayerme/visage": "^3.5.2"
+    "@readyplayerme/visage": "^4.0.0"
   }
 }
