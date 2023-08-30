@@ -1,3 +1,11 @@
+> ⚠️ **This package is deprecated and will not receive new updates.**
+>
+>Please use the following packages instead:
+>
+>- Ready Player Me - React Avatar Creator package here: https://github.com/readyplayerme/rpm-react-avatar-creator
+>
+>- Ready Player Me - Visage package here: https://github.com/readyplayerme/visage
+
 # Ready Player Me React SDK
 
 **Ready Player Me React SDK** is a set of components and helper methods to help implementing Ready Player Me into React projects. With this SDK you can display Ready Player Me editor in your React project, create, edit and display avatars.
